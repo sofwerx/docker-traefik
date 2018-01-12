@@ -14,7 +14,12 @@ services:
     container_name: traefik
     hostname: traefik
     build: .
-    image: sofwerx/traefik
+    build:
+      context: .
+      dockerfile: Dockerfile.${ARCH}
+      args:
+        ARCH: ${ARGH}
+    image: sofwerx/traefik:${ARCH}
     restart: always
 #    ports:
 #      - 80:80
