@@ -1,4 +1,4 @@
-FROM traefik:1.4-alpine
+FROM traefik:1.5-alpine
 
 RUN apk --no-cache add bash
 ADD run.sh /run.sh

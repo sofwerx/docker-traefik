@@ -91,6 +91,8 @@ storageFile = "/ssl/acme.json"
 #
 entryPoint = "https"
 
+[acme.httpChallenge]
+entryPoint = "http"
 EOF
 
 if [ -n "${AWS_ACCESS_KEY_ID}" ] ; then
