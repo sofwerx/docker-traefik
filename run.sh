@@ -90,11 +90,18 @@ storageFile = "/ssl/acme.json"
 # Required
 #
 entryPoint = "https"
+EOF
 
+# Let's Encrypt ACME tls-sni-01 no longer works.
+# Let's Encrypt ACME http-01 only works on port 80 now.
+if [ "$HTTP_PORT" = "80" ]; then
+  cat <<EOF >> /etc/traefik/traefik.toml
 [acme.httpChallenge]
 entryPoint = "http"
 EOF
+fi
 
+# Let's Encrypt ACME dns-01 works, if the environment variables are present.
 if [ -n "${AWS_ACCESS_KEY_ID}" ] ; then
 cat <<EOF >> /etc/traefik/traefik.toml
 dnsProvider = "route53"
