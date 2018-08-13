@@ -169,7 +169,7 @@ RUN apt-get install -y curl gnupg gnupg2 apt-transport-https lsb-release
 # && dpkg --listfiles nodejs | grep npm
 RUN apt-get install -y jq
 RUN set -x ; npm install $( jq -r '.devDependencies | keys | join(" ")' package.json | sed -e 's/phantomjs-prebuilt //' -e 's/karma-phantomjs-shim //' -e 's/karma-phantomjs-launcher //' )
-RUN npm install
+#RUN npm install
 RUN npm run build
 
 #RUN apt-get install -y build-essential g++ flex bison gperf ruby perl \
