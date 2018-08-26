@@ -7,6 +7,7 @@ mkdir -p /etc/traefik
 mkdir -p /ssl
 cat <<EOF > /etc/traefik/traefik.toml
 logLevel = "DEBUG"
+InsecureSkipVerify = true
 ################################################################
 # Web configuration backend
 ################################################################
