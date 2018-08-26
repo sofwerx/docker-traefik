@@ -83,7 +83,7 @@ email = "${EMAIL}"
 #
 # Required
 #
-storageFile = "/ssl/acme.json"
+storage = "/ssl/acme.json"
 
 # Entrypoint to proxy acme challenge to.
 # WARNING, must point to an entrypoint on port 443
@@ -98,15 +98,16 @@ EOF
 if [ "$HTTP_PORT" = "80" ]; then
   cat <<EOF >> /etc/traefik/traefik.toml
 [acme.httpChallenge]
-entryPoint = "http"
+  entryPoint = "http"
 EOF
 fi
 
 # Let's Encrypt ACME dns-01 works, if the environment variables are present.
 if [ -n "${AWS_ACCESS_KEY_ID}" ] ; then
 cat <<EOF >> /etc/traefik/traefik.toml
-dnsProvider = "route53"
-acmeLogging = true
+[acme.dnsChallenge]
+  provider = "route53"
+  delayBeforeCheck = 0
 EOF
 fi
 
@@ -117,6 +118,7 @@ cat <<EOF >> /etc/traefik/traefik.toml
 #
 # Optional
 #
+acmeLogging = true
 onDemand = false
 onHostRule = true
 
@@ -153,8 +155,8 @@ cat <<EOF >> /etc/traefik/traefik.toml
 # [[acme.domains]]
 #   main = "local4.com"
 [[acme.domains]]
-  main = "${DNS_DOMAIN}"
-  sans = [ ${SUBDOMAINS} ]
+  main = "*.${DNS_DOMAIN}"
+  sans = [ "${DNS_DOMAIN}" ]
 EOF
 
 fi # $WILDCARD_SSL_CERTIFICATE
