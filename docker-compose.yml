@@ -15,7 +15,7 @@ services:
     hostname: traefik
     build:
       context: .
-      dockerfile: Dockerfile.${ARCH}
+      dockerfile: Dockerfile
       args:
         ARCH: ${ARCH}
     image: sofwerx/traefik:${ARCH}

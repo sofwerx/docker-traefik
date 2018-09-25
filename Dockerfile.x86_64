@@ -1,6 +1,0 @@
-FROM traefik:1.7-alpine
-
-RUN apk --no-cache add bash
-ADD run.sh /run.sh
-
-ENTRYPOINT /run.sh
