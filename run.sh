@@ -93,24 +93,6 @@ storage = "/ssl/acme.json"
 entryPoint = "https"
 EOF
 
-# Let's Encrypt ACME tls-sni-01 no longer works.
-# Let's Encrypt ACME http-01 only works on port 80 now.
-if [ "$HTTP_PORT" = "80" ]; then
-  cat <<EOF >> /etc/traefik/traefik.toml
-[acme.httpChallenge]
-  entryPoint = "http"
-EOF
-fi
-
-# Let's Encrypt ACME dns-01 works, if the environment variables are present.
-if [ -n "${AWS_ACCESS_KEY_ID}" ] ; then
-cat <<EOF >> /etc/traefik/traefik.toml
-[acme.dnsChallenge]
-  provider = "route53"
-  delayBeforeCheck = 0
-EOF
-fi
-
 cat <<EOF >> /etc/traefik/traefik.toml
 # Enable on demand certificate. This will request a certificate from Let's Encrypt during the first TLS handshake for a hostname that does not yet have a certificate.
 # WARNING, TLS handshakes will be slow when requesting a hostname certificate for the first time, this can leads to DoS attacks.
@@ -133,6 +115,24 @@ EOF
 if [ -n "${STAGING}" ] ; then
 cat <<EOF >> /etc/traefik/traefik.toml
 caServer = "https://acme-staging.api.letsencrypt.org/directory"
+EOF
+fi
+
+# Let's Encrypt ACME tls-sni-01 no longer works.
+# Let's Encrypt ACME http-01 only works on port 80 now.
+if [ "$HTTP_PORT" = "80" ]; then
+  cat <<EOF >> /etc/traefik/traefik.toml
+[acme.httpChallenge]
+  entryPoint = "http"
+EOF
+fi
+
+# Let's Encrypt ACME dns-01 works, if the environment variables are present.
+if [ -n "${AWS_ACCESS_KEY_ID}" ] ; then
+cat <<EOF >> /etc/traefik/traefik.toml
+[acme.dnsChallenge]
+  provider = "route53"
+  delayBeforeCheck = 2
 EOF
 fi
 
