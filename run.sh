@@ -142,18 +142,6 @@ cat <<EOF >> /etc/traefik/traefik.toml
 # Optional (but recommended)
 [acme.tlsChallenge]
 
-# Use a HTTP-01 ACME challenge.
-#
-# Optional
-#
-[acme.httpChallenge]
-
-  # EntryPoint to use for the HTTP-01 challenges.
-  #
-  # Required
-  #
-  entryPoint = "http"
-
 # Domains list
 # You can provide SANs (alternative domains) to each main domain
 # All domains must have A/AAAA records pointing to Traefik
