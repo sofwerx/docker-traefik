@@ -132,11 +132,27 @@ if [ -n "${AWS_ACCESS_KEY_ID}" ] ; then
 cat <<EOF >> /etc/traefik/traefik.toml
 [acme.dnsChallenge]
   provider = "route53"
-  delayBeforeCheck = 10
+  delayBeforeCheck = 30
 EOF
 fi
 
 cat <<EOF >> /etc/traefik/traefik.toml
+# Use a TLS-ALPN-01 ACME challenge.
+#
+# Optional (but recommended)
+[acme.tlsChallenge]
+
+# Use a HTTP-01 ACME challenge.
+#
+# Optional
+#
+[acme.httpChallenge]
+
+  # EntryPoint to use for the HTTP-01 challenges.
+  #
+  # Required
+  #
+  entryPoint = "http"
 
 # Domains list
 # You can provide SANs (alternative domains) to each main domain
@@ -156,7 +172,7 @@ cat <<EOF >> /etc/traefik/traefik.toml
 #   main = "local4.com"
 [[acme.domains]]
   main = "*.${DNS_DOMAIN}"
-  sans = [ "${DNS_DOMAIN}" ]
+#  sans = [ "${DNS_DOMAIN}" ]
 EOF
 
 fi # $WILDCARD_SSL_CERTIFICATE
