@@ -132,7 +132,7 @@ if [ -n "${AWS_ACCESS_KEY_ID}" ] ; then
 cat <<EOF >> /etc/traefik/traefik.toml
 [acme.dnsChallenge]
   provider = "route53"
-  delayBeforeCheck = 2
+  delayBeforeCheck = 10
 EOF
 fi
 
