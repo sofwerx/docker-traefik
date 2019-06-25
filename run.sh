@@ -7,6 +7,7 @@ mkdir -p /etc/traefik
 mkdir -p /ssl
 cat <<EOF > /etc/traefik/traefik.toml
 logLevel = "DEBUG"
+InsecureSkipVerify = true
 ################################################################
 # Web configuration backend
 ################################################################
@@ -135,7 +136,29 @@ caServer = "https://acme-staging.api.letsencrypt.org/directory"
 EOF
 fi
 
+# Let's Encrypt ACME tls-sni-01 no longer works.
+# Let's Encrypt ACME http-01 only works on port 80 now.
+if [ "$HTTP_PORT" = "80" ]; then
+  cat <<EOF >> /etc/traefik/traefik.toml
+[acme.httpChallenge]
+  entryPoint = "http"
+EOF
+fi
+
+# Let's Encrypt ACME dns-01 works, if the environment variables are present.
+if [ -n "${AWS_ACCESS_KEY_ID}" ] ; then
 cat <<EOF >> /etc/traefik/traefik.toml
+[acme.dnsChallenge]
+  provider = "route53"
+  delayBeforeCheck = 30
+EOF
+fi
+
+cat <<EOF >> /etc/traefik/traefik.toml
+# Use a TLS-ALPN-01 ACME challenge.
+#
+# Optional (but recommended)
+[acme.tlsChallenge]
 
 # Domains list
 # You can provide SANs (alternative domains) to each main domain
@@ -155,7 +178,7 @@ cat <<EOF >> /etc/traefik/traefik.toml
 #   main = "local4.com"
 [[acme.domains]]
   main = "*.${DNS_DOMAIN}"
-  sans = [ "${DNS_DOMAIN}" ]
+#  sans = [ "${DNS_DOMAIN}" ]
 EOF
 
 fi # $WILDCARD_SSL_CERTIFICATE
