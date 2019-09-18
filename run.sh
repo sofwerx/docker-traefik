@@ -37,7 +37,7 @@ cat <<EOF >> /etc/traefik/traefik.toml
 #    entryPoint = "https"
   [entryPoints.https]
   address = ":${HTTPS_PORT}"
-    [entryPoints.https.tls]
+#    [entryPoints.https.tls]
 EOF
 
 if [ -n "${WILDCARD_SSL_CERTIFICATE}" ]; then
@@ -118,7 +118,7 @@ cat <<EOF >> /etc/traefik/traefik.toml
 # Optional
 #
 acmeLogging = true
-onDemand = false
+onDemand = true
 onHostRule = true
 
 # CA server to use
