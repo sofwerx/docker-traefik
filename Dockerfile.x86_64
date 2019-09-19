@@ -1,9 +1,7 @@
-<<<<<<< Updated upstream
 FROM traefik:1.7-alpine
 #FROM traefik:2.0-alpine
 =======
 FROM traefik:latest
->>>>>>> Stashed changes
 
 RUN apk --no-cache add bash certbot
 RUN pip3 install certbot-dns-route53
